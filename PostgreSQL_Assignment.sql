@@ -63,4 +63,14 @@ INSERT INTO sighting ("sighting_id", "species_id", "ranger_id", "location", "sig
 INSERT INTO ranger ("ranger_id" ,"name", "region") VALUES
 (4, 'Derek Fox', 'Coastal Plains');
 
-SELECT * FROM ranger;
+-- problem-2
+SELECT COUNT(DISTINCT "species_id") as "unique_species_count" FROM sighting;
+
+-- problem-3
+SELECT * FROM sighting
+WHERE "location" ILIKE '%pass';
+
+-- problem-4
+SELECT ranger."name", COUNT(sighting."sighting_id") as "total_sightings" from ranger
+LEFT JOIN sighting on ranger."ranger_id" = sighting."ranger_id"
+GROUP BY ranger."ranger_id";
