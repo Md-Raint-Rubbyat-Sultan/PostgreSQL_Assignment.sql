@@ -39,13 +39,13 @@ CREATE TABLE sighting (
 -- data insertion
 
 -- renger data
-INSERT INTO ranger VALUES
+INSERT INTO ranger ("ranger_id", "name", "region") VALUES
 (1, 'Alice Green', 'Northern Hills'),
 (2, 'Bob White', 'River Delta'),
 (3, 'Carol King', 'Mountain Range')
 
 -- species data
-INSERT INTO specie VALUES
+INSERT INTO specie ("species_id", "common_name", "scientific_name", "discovery_date", "conservation_status") VALUES
 (1, 'Snow Leopard', 'Panthera uncia', '1775-01-01', 'Endangered'),
 (2, 'Bengal Tiger', 'Panthera tigris tigris', '1758-01-01', 'Endangered'),
 (3, 'Red Panda', 'Ailurus fulgens', '1825-01-01', 'Vulnerable'),
@@ -58,3 +58,9 @@ INSERT INTO sighting ("sighting_id", "species_id", "ranger_id", "location", "sig
 (3, 3, 3, 'Bamboo Grove East', '2024-05-15 09:10:00', 'Feeding observed'),
 (4, 1, 2, 'Snowfall Pass', '2024-05-18 18:30:00', NULL);
 
+-- ---------qureies----------
+-- problem-1
+INSERT INTO ranger ("ranger_id" ,"name", "region") VALUES
+(4, 'Derek Fox', 'Coastal Plains');
+
+SELECT * FROM ranger;
