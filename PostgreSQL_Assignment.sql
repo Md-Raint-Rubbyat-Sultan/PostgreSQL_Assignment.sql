@@ -84,4 +84,8 @@ WHERE sighting."sighting_id" IS NULL;
 SELECT "common_name", "sighting_time", "name" FROM sighting as si
 JOIN ranger as rn ON rn."ranger_id" = si."ranger_id"
 JOIN specie as sp ON sp."species_id" = si."species_id"
-ORDER BY si."sighting_time" DESC LIMIT 2;
+ORDER BY si."sighting_time" DESC
+LIMIT 2;
+
+-- problem-7
+SELECT 
