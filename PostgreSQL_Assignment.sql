@@ -1,6 +1,6 @@
 -- Active: 1747402851514@@127.0.0.1@3001@conservation_db
 
--- Table schema
+                        -------------- Table schema -----------------
 
 -- rengers table
 CREATE TABLE ranger (
@@ -27,7 +27,7 @@ CREATE TABLE sighting (
     "sighting_id" SERIAL,
     "ranger_id" INT NOT NULL,
     "species_id" INT NOT NULL,
-    "sighting_time" TIMESTAMP,
+    "sighting_time" TIMESTAMPTZ,
     "location" VARCHAR(62) NOT NULL,
     "notes" TEXT,
 
@@ -36,7 +36,7 @@ CREATE TABLE sighting (
     FOREIGN KEY ("species_id") REFERENCES specie ("species_id")
 );
 
--- data insertion
+                    -------------- data insertion ----------------
 
 -- renger data
 INSERT INTO ranger ("ranger_id", "name", "region") VALUES
@@ -51,14 +51,15 @@ INSERT INTO specie ("species_id", "common_name", "scientific_name", "discovery_d
 (3, 'Red Panda', 'Ailurus fulgens', '1825-01-01', 'Vulnerable'),
 (4, 'Asiatic Elephant', 'Elephas maximus indicus', '1758-01-01', 'Endangered');
 
--- sightings Table
+-- sightings data
 INSERT INTO sighting ("sighting_id", "species_id", "ranger_id", "location", "sighting_time", "notes") VALUES
 (1, 1, 1, 'Peak Ridge', '2024-05-10 07:45:00', 'Camera trap image captured'),
 (2, 2, 2, 'Bankwood Area', '2024-05-12 16:20:00', 'Juvenile seen'),
 (3, 3, 3, 'Bamboo Grove East', '2024-05-15 09:10:00', 'Feeding observed'),
 (4, 1, 2, 'Snowfall Pass', '2024-05-18 18:30:00', NULL);
 
--- ---------qureies----------
+                            -------------- qureies ---------------
+
 -- problem-1
 INSERT INTO ranger ("ranger_id" ,"name", "region") VALUES
 (4, 'Derek Fox', 'Coastal Plains');
@@ -88,4 +89,33 @@ ORDER BY si."sighting_time" DESC
 LIMIT 2;
 
 -- problem-7
-SELECT 
+UPDATE specie
+SET "conservation_status" = 'Historic'
+WHERE EXTRACT(YEAR FROM "discovery_date") < 1800;
+
+-- problem-8
+CREATE OR REPLACE FUNCTION check_time(twz TIMESTAMPTZ)
+RETURNS TEXT 
+AS
+$$
+    DECLARE
+        time_of_day TEXT;
+    BEGIN
+        IF EXTRACT(HOUR from twz) BETWEEN 6 AND 11 THEN
+            time_of_day := 'Morning';
+        ELSEIF EXTRACT(HOUR from twz) BETWEEN 12 AND 17 THEN
+            time_of_day := 'Afternoon';
+        ELSEIF EXTRACT(HOUR from twz) >= 18 THEN
+            time_of_day := 'Evening';
+        END IF;
+        RETURN time_of_day;
+    END;
+$$ LANGUAGE PLPGSQL;
+
+SELECT "sighting_id", check_time("sighting_time") as "time_of_day" FROM sighting;
+
+-- problem-9
+DELETE FROM ranger
+WHERE "ranger_id" NOT IN (
+    SELECT "ranger_id" FROM sighting
+);
