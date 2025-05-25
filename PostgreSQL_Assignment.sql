@@ -74,3 +74,14 @@ WHERE "location" ILIKE '%pass';
 SELECT ranger."name", COUNT(sighting."sighting_id") as "total_sightings" from ranger
 LEFT JOIN sighting on ranger."ranger_id" = sighting."ranger_id"
 GROUP BY ranger."ranger_id";
+
+-- problem-5
+SELECT "common_name" FROM specie
+LEFT JOIN sighting on specie."species_id" = sighting."species_id"
+WHERE sighting."sighting_id" IS NULL;
+
+-- problem-6
+SELECT "common_name", "sighting_time", "name" FROM sighting as si
+JOIN ranger as rn ON rn."ranger_id" = si."ranger_id"
+JOIN specie as sp ON sp."species_id" = si."species_id"
+ORDER BY si."sighting_time" DESC LIMIT 2;
